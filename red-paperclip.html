@@ -82,10 +82,10 @@ details{margin-top:14px}summary{font-weight:800;cursor:pointer;color:var(--red)}
 .item .num{color:var(--red);font-weight:800}
 .item input{width:150px}
 .ru{color:var(--muted);font-weight:700;font-size:15px}
-.past{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:8px}
+.past{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:8px}
 .past .cell{display:flex;align-items:center;gap:8px;background:var(--bg);border-radius:14px;padding:8px 10px;font-weight:800}
 .past .cell span{min-width:76px}
-.past .cell input{width:100%}
+.past .cell input{width:100%;flex:1 1 0}
 .story{background:var(--bg);border:2px solid var(--line);border-radius:18px;padding:14px 14px;line-height:2.3;font-size:17px;font-weight:600}
 .story input{width:118px;padding:0 6px;height:34px;line-height:1.2}
 .story .bv{color:var(--muted);font-weight:800;font-size:14px}
@@ -127,16 +127,16 @@ details{margin-top:14px}summary{font-weight:800;cursor:pointer;color:var(--red)}
 <script>
 /* ---------- DATA ---------- */
 const W=[
-{en:"buy",past:"bought",ru:"покупать",g:"verbs"},
-{en:"sell",past:"sold",ru:"продавать",g:"verbs"},
-{en:"spend",past:"spent",ru:"тратить",g:"verbs"},
+{en:"buy",past:"bought",pp:"bought",ru:"покупать",g:"verbs"},
+{en:"sell",past:"sold",pp:"sold",ru:"продавать",g:"verbs"},
+{en:"spend",past:"spent",pp:"spent",ru:"тратить",g:"verbs"},
 {en:"waste",past:"wasted",ru:"тратить впустую",g:"verbs"},
-{en:"lose",past:"lost",ru:"терять",g:"verbs"},
-{en:"lend",past:"lent",ru:"давать взаймы, одалживать",g:"verbs"},
+{en:"lose",past:"lost",pp:"lost",ru:"терять",g:"verbs"},
+{en:"lend",past:"lent",pp:"lent",ru:"давать взаймы, одалживать",g:"verbs"},
 {en:"borrow",past:"borrowed",ru:"брать взаймы",g:"verbs"},
 {en:"swap",past:"swapped",ru:"менять, обменивать",g:"verbs"},
 {en:"save",past:"saved",ru:"копить, экономить",g:"verbs"},
-{en:"win",past:"won",ru:"выигрывать",g:"verbs"},
+{en:"win",past:"won",pp:"won",ru:"выигрывать",g:"verbs"},
 {en:"earn",past:"earned",ru:"зарабатывать",g:"verbs"},
 {en:"advertise",past:"advertised",ru:"рекламировать, давать объявление",g:"verbs"},
 {en:"expensive",ru:"дорогой",g:"adj"},
@@ -245,7 +245,7 @@ task("New Words · Карточки","Нажми на карточку, чтоб
  const chips=h("div",{class:"chips"});const card=h("div",{class:"card"},h("div",{class:"inner"},h("div",{class:"face front"}),h("div",{class:"face back"})));
  const count=h("span",{class:"count"}),seenT=h("div",{class:"qcount",style:"text-align:center;margin-top:8px"});
  GROUPS.forEach(([k,l])=>chips.append(h("button",{class:"chip"+(k==="all"?" on":""),onclick:e=>{chips.querySelectorAll(".chip").forEach(c=>c.classList.remove("on"));e.target.classList.add("on");list=k==="all"?W:W.filter(w=>w.g===k);i=0;render()}},l)));
- const enFace=w=>[h("b",{},w.en),w.past?h("small",{},"past: "+w.past):null,h("em",{},"нажми — перевод")];
+ const enFace=w=>[h("b",{},w.en),w.past?h("small",{},w.pp?`${w.en} – ${w.past} – ${w.pp}`:"past: "+w.past):null,h("em",{},"нажми — перевод")];
  const ruFace=w=>[h("b",{style:"font-size:clamp(20px,6vw,30px)"},w.ru),h("em",{},"нажми — английское слово")];
  function render(){const w=list[i];card.classList.remove("flip");const[fr,bk]=card.querySelectorAll(".face");
   setTimeout(()=>{fr.innerHTML="";bk.innerHTML="";fr.append(...(ruFirst?ruFace(w):enFace(w)));bk.append(...(ruFirst?enFace(w):ruFace(w)))},card.classList.contains("flip")?0:0);
@@ -257,7 +257,7 @@ task("New Words · Карточки","Нажми на карточку, чтоб
   h("button",{class:"round","aria-label":"Перемешать",onclick:()=>{list=shuffle(list);i=0;render()}},"⤮"),
   h("button",{class:"round","aria-label":"Вперёд",onclick:()=>{i=(i+1)%list.length;render()}},"›"));
  const tog=h("label",{style:"display:flex;gap:8px;justify-content:center;align-items:center;font-weight:800;margin-top:12px"},h("input",{type:"checkbox",onchange:e=>{ruFirst=e.target.checked;render()}}),"Сначала русский");
- const wl=h("div",{class:"wl"});GROUPS.slice(1).forEach(([k,l])=>{wl.append(h("div",{class:"gh"},l));W.filter(w=>w.g===k).forEach(w=>{wl.append(h("div",{class:"e"},w.en+(w.past?" · "+w.past:"")),h("div",{},w.ru))})});
+ const wl=h("div",{class:"wl"});GROUPS.slice(1).forEach(([k,l])=>{wl.append(h("div",{class:"gh"},l));W.filter(w=>w.g===k).forEach(w=>{wl.append(h("div",{class:"e"},w.en+(w.pp?" – "+w.past+" – "+w.pp:w.past?" · "+w.past:"")),h("div",{},w.ru))})});
  body.append(chips,card,ctrl,tog,seenT,h("details",{},h("summary",{},"Список всех слов"),wl));render();
 });
 
@@ -296,9 +296,9 @@ task("Write the verb","Впиши глагол по-английски. Русс
  body.append(list);checker(body,ins,done)});
 
 /* ---------- 8. PAST FORMS ---------- */
-task("Past forms","Напиши прошедшую форму глагола. ⚡ — неправильный глагол (irregular).",(body,done)=>{
+task("Past forms","Напиши прошедшую форму глагола. ⚡ — неправильный глагол (irregular): у него напиши 2-ю и 3-ю формы.",(body,done)=>{
  const irr=["buy","sell","spend","lose","lend","win"];const g=h("div",{class:"past"}),ins=[];
- shuffle(W.filter(w=>w.g==="verbs")).forEach(w=>{const i=inp(w.past);ins.push(i);g.append(h("div",{class:"cell"},h("span",{},w.en+(irr.includes(w.en)?" ⚡":"")),i))});
+ shuffle(W.filter(w=>w.g==="verbs")).forEach(w=>{const i=inp(w.past);i.placeholder=w.pp?"V2":"past";ins.push(i);const c=h("div",{class:"cell"},h("span",{},w.en+(w.pp?" ⚡":"")),i);if(w.pp){const j=inp(w.pp);j.placeholder="V3";ins.push(j);c.append(j)}g.append(c)});
  body.append(g);checker(body,ins,done)});
 
 /* ---------- 9. STORY IN THE PAST ---------- */
