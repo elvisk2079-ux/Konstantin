@@ -1,0 +1,373 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>One Red Paperclip · Money words</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;700&family=Nunito:wght@600;700;800&display=swap">
+<style>
+:root{--bg:#f7f4ef;--paper:#fff;--ink:#1f2430;--muted:#646a78;--red:#d63a3a;--redsoft:#fbe3e1;--yellow:#fdf0c4;--blue:#dde9f7;--mint:#dcf2e2;--lilac:#ebe2f7;--good:#2f8a4c;--bad:#c8384f;--line:#e6ded2;--chip:#f1ece4;
+--display:"Unbounded",system-ui,sans-serif;--body:"Nunito",system-ui,sans-serif}
+@media (prefers-color-scheme:dark){:root{--bg:#17191f;--paper:#22252e;--ink:#f1f2f6;--muted:#a9aebb;--red:#ff6b6b;--redsoft:#4a2a2c;--yellow:#4a4024;--blue:#263650;--mint:#20402c;--lilac:#352c4a;--good:#7dd59a;--bad:#ff8a9c;--line:#363a46;--chip:#2c303a;color-scheme:dark}}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.5;padding:16px max(14px,env(safe-area-inset-left)) 70px}
+.wrap{max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
+h1,h2{font-family:var(--display);line-height:1.15;margin:0;text-wrap:balance}
+a.back{font-weight:800;color:var(--red);text-decoration:none}
+.hero{background:var(--paper);border:2px solid var(--line);border-radius:24px;padding:22px 18px 18px;text-align:center;position:relative;overflow:hidden}
+.hero h1{font-size:clamp(26px,7vw,40px);color:var(--red)}
+.hero .sub{color:var(--muted);font-weight:800;margin:6px 0 0}
+.clip{width:84px;height:auto;margin:0 auto 8px;display:block}
+.progress{position:sticky;top:0;z-index:5;background:var(--bg);padding:8px 0 6px}
+.bar{height:12px;border-radius:99px;background:var(--line);overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--red);border-radius:99px;transition:width .4s}
+.ptext{font-weight:800;font-size:14px;color:var(--muted);display:flex;justify-content:space-between;margin-top:4px}
+section.task{background:var(--paper);border:2px solid var(--line);border-radius:22px;padding:18px 16px 20px;scroll-margin-top:60px}
+section.task.done{border-color:var(--good)}
+.head{display:flex;gap:10px;align-items:center;margin-bottom:6px}
+.head .n{flex:none;width:36px;height:36px;border-radius:50%;background:var(--red);color:#fff;font-family:var(--display);font-size:16px;display:grid;place-items:center}
+.done .head .n{background:var(--good)}
+.done .head .n::after{content:"✓"}.done .head .n span{display:none}
+.head h2{font-size:clamp(17px,4.4vw,21px)}
+.lead{color:var(--muted);font-weight:700;margin:0 0 14px}
+button{font:inherit;cursor:pointer;color:inherit;-webkit-tap-highlight-color:transparent}
+button:focus-visible,input:focus-visible{outline:3px solid var(--red);outline-offset:2px}
+.btn{border:2px solid var(--ink);background:var(--ink);color:var(--paper);border-radius:999px;padding:8px 18px;font-weight:800}
+.btn.ghost{background:transparent;color:var(--ink)}
+.btn:disabled{opacity:.4;cursor:default}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:14px}
+.fb{font-weight:800;min-height:1.4em}.ok{color:var(--good)}.no{color:var(--bad)}
+input[type=text]{font:inherit;font-weight:800;border:2px solid var(--line);border-radius:12px;padding:6px 10px;background:var(--bg);color:var(--ink);min-width:0}
+input.right{border-color:var(--good);background:var(--mint)}input.wrong{border-color:var(--bad);background:var(--redsoft)}
+.shake{animation:sh .35s}
+@keyframes sh{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:2px solid var(--line);background:var(--chip);border-radius:999px;padding:4px 12px;font-weight:800;font-size:15px}
+.chip.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+/* flashcards */
+.card{perspective:1000px;margin:14px 0 10px;cursor:pointer;user-select:none}
+.card .inner{position:relative;height:200px;transition:transform .5s;transform-style:preserve-3d}
+.card.flip .inner{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;border-radius:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px;text-align:center;backface-visibility:hidden;-webkit-backface-visibility:hidden;border:2px solid var(--line)}
+.face.front{background:var(--yellow)}.face.back{background:var(--blue);transform:rotateY(180deg)}
+.face b{font-family:var(--display);font-size:clamp(24px,7vw,36px);line-height:1.15}
+.face small{font-weight:800;color:var(--muted);margin-top:8px;font-size:16px}
+.face em{position:absolute;bottom:10px;font-style:normal;font-size:13px;color:var(--muted);font-weight:700}
+.ctrl{display:flex;justify-content:center;align-items:center;gap:10px;flex-wrap:wrap}
+.round{width:48px;height:48px;border-radius:50%;border:2px solid var(--ink);background:var(--paper);font-size:20px;font-weight:800}
+.count{font-weight:800;color:var(--muted);min-width:70px;text-align:center}
+details{margin-top:14px}summary{font-weight:800;cursor:pointer;color:var(--red)}
+.wl{display:grid;grid-template-columns:1fr 1fr;gap:4px 12px;margin-top:10px;font-size:15px}
+.wl div{padding:4px 0;border-bottom:1px solid var(--line)}
+.wl .e{font-weight:800}
+.wl .gh{grid-column:1/-1;font-family:var(--display);font-size:13px;color:var(--red);border:0;padding-top:10px}
+/* quiz */
+.qcount{font-weight:800;color:var(--muted);font-size:14px}
+.qq{font-size:clamp(20px,5.4vw,26px);font-weight:800;margin:6px 0 12px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.qq.sent{font-size:clamp(17px,4.6vw,20px);font-weight:700}
+.qq .gap{display:inline-block;min-width:70px;border-bottom:3px solid var(--red)}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.opts.one{grid-template-columns:1fr}
+.opt{border:2px solid var(--line);background:var(--bg);border-radius:14px;padding:10px 12px;font-weight:800;text-align:left;min-height:52px}
+.opt.right{background:var(--mint);border-color:var(--good)}.opt.wrong{background:var(--redsoft);border-color:var(--bad)}
+.say{flex:none;width:40px;height:40px;border-radius:50%;border:2px solid var(--red);background:var(--paper);font-size:17px}
+/* match */
+.match{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.match .col{display:flex;flex-direction:column;gap:8px}
+.mi{border:2px solid var(--line);background:var(--bg);border-radius:14px;padding:9px 10px;font-weight:800;min-height:48px;text-align:center;font-size:16px}
+.mi.sel{border-color:var(--ink);background:var(--yellow)}
+.mi.got{background:var(--mint);border-color:var(--good);opacity:.55;cursor:default}
+.mi.wrong{border-color:var(--bad);background:var(--redsoft)}
+/* lists */
+.list{display:flex;flex-direction:column;gap:12px}
+.item{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-weight:700}
+.item .num{color:var(--red);font-weight:800}
+.item input{width:150px}
+.ru{color:var(--muted);font-weight:700;font-size:15px}
+.past{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:8px}
+.past .cell{display:flex;align-items:center;gap:8px;background:var(--bg);border-radius:14px;padding:8px 10px;font-weight:800}
+.past .cell span{min-width:76px}
+.past .cell input{width:100%}
+.story{background:var(--bg);border:2px solid var(--line);border-radius:18px;padding:14px 14px;line-height:2.3;font-size:17px;font-weight:600}
+.story input{width:118px;padding:0 6px;height:34px;line-height:1.2}
+.story .bv{color:var(--muted);font-weight:800;font-size:14px}
+.bank{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 12px}
+.bank span{background:var(--yellow);border-radius:999px;padding:2px 11px;font-weight:800;font-size:14px}
+.bank span.used{text-decoration:line-through;opacity:.45}
+/* scramble & builder */
+.target{min-height:56px;border:2px dashed var(--line);border-radius:14px;padding:8px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:8px 0 12px}
+.target.ok{border-style:solid;border-color:var(--good);background:var(--mint)}
+.tiles{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
+.tile{min-width:42px;height:44px;border:2px solid var(--ink);background:var(--paper);border-radius:10px;font-weight:800;font-size:19px;padding:0 10px}
+.tile.w{font-size:17px}
+.tile.used{visibility:hidden}
+.chain{display:flex;flex-wrap:wrap;gap:6px;align-items:center;min-height:50px;border:2px dashed var(--line);border-radius:14px;padding:8px;margin:8px 0 12px}
+.chain .link{background:var(--mint);border:2px solid var(--good);border-radius:12px;padding:4px 10px;font-weight:800;font-size:15px}
+.chain .arr{color:var(--red);font-weight:800}
+.tf .item{justify-content:space-between;background:var(--bg);border-radius:14px;padding:10px 12px;border:2px solid transparent}
+.tf .item.ok{border-color:var(--good)}
+.tf .q{flex:1 1 220px}
+.tf .bs{display:flex;gap:6px}
+.tf .bs button{border:2px solid var(--line);background:var(--paper);border-radius:999px;padding:4px 14px;font-weight:800}
+.tf .bs button.right{background:var(--mint);border-color:var(--good)}
+.tf .bs button.wrong{background:var(--redsoft);border-color:var(--bad)}
+.listen .item{background:var(--bg);border-radius:14px;padding:8px 10px}
+.listen .item input{flex:1 1 140px}
+.final{text-align:center}
+.final .big{font-family:var(--display);font-size:clamp(30px,9vw,46px);color:var(--red)}
+.final input{width:100%;max-width:280px;text-align:center}
+</style></head><body><div class="wrap">
+<a class="back" href="index.html">← Все уроки</a>
+<div class="hero">
+<svg class="clip" viewBox="0 0 120 60" aria-hidden="true"><path d="M30 38 H96 a14 14 0 0 0 0-28 H22 a20 20 0 0 0 0 40 H100" fill="none" stroke="#d63a3a" stroke-width="7" stroke-linecap="round" transform="rotate(-8 60 30)"/></svg>
+<h1>One Red Paperclip</h1>
+<p class="sub">Money words · Verbs, adjectives &amp; words from the texts</p>
+</div>
+<div class="progress"><div class="bar"><i id="barI"></i></div><div class="ptext"><span id="pDone">Выполнено: 0</span><span id="pErr">Ошибок: 0</span></div></div>
+<div id="tasks" class="wrap" style="gap:18px"></div>
+</div>
+<script>
+/* ---------- DATA ---------- */
+const W=[
+{en:"buy",past:"bought",ru:"покупать",g:"verbs"},
+{en:"sell",past:"sold",ru:"продавать",g:"verbs"},
+{en:"spend",past:"spent",ru:"тратить",g:"verbs"},
+{en:"waste",past:"wasted",ru:"тратить впустую",g:"verbs"},
+{en:"lose",past:"lost",ru:"терять",g:"verbs"},
+{en:"lend",past:"lent",ru:"давать взаймы, одалживать",g:"verbs"},
+{en:"borrow",past:"borrowed",ru:"брать взаймы",g:"verbs"},
+{en:"swap",past:"swapped",ru:"менять, обменивать",g:"verbs"},
+{en:"save",past:"saved",ru:"копить, экономить",g:"verbs"},
+{en:"win",past:"won",ru:"выигрывать",g:"verbs"},
+{en:"earn",past:"earned",ru:"зарабатывать",g:"verbs"},
+{en:"advertise",past:"advertised",ru:"рекламировать, давать объявление",g:"verbs"},
+{en:"expensive",ru:"дорогой",g:"adj"},
+{en:"cheap",ru:"дешёвый",g:"adj"},
+{en:"rich",ru:"богатый",g:"adj"},
+{en:"poor",ru:"бедный",g:"adj"},
+{en:"free",ru:"бесплатный",g:"adj"},
+{en:"pen",ru:"ручка",g:"things"},
+{en:"computer",ru:"компьютер",g:"things"},
+{en:"island",ru:"остров",g:"things"},
+{en:"van",ru:"фургон",g:"things"},
+{en:"snowmobile",ru:"снегоход",g:"things"},
+{en:"paperclip",ru:"скрепка",g:"things"},
+{en:"barbecue",ru:"гриль, барбекю",g:"things"},
+{en:"doorknob",ru:"дверная ручка",g:"things"},
+{en:"pocket money",ru:"карманные деньги",g:"text"},
+{en:"really",ru:"действительно, на самом деле",g:"text"},
+{en:"use",ru:"использовать, пользоваться",g:"text"},
+{en:"decide",ru:"решать",g:"text"},
+{en:"local",ru:"местный",g:"text"},
+{en:"newspaper",ru:"газета",g:"text"},
+{en:"but",ru:"но",g:"text"},
+{en:"need",ru:"нуждаться, нужно",g:"text"},
+{en:"so",ru:"поэтому, так что",g:"text"},
+{en:"exactly",ru:"именно, точно",g:"text"},
+{en:"in the end",ru:"в конце концов",g:"text"},
+{en:"in the shape of",ru:"в форме (чего-то)",g:"text"},
+{en:"then",ru:"затем, потом",g:"text"},
+{en:"including",ru:"включая",g:"text"},
+{en:"finally",ru:"наконец",g:"text"},
+{en:"mayor",ru:"мэр",g:"text"},
+{en:"offer",ru:"предлагать",g:"text"},
+{en:"in addition",ru:"кроме того",g:"text"},
+{en:"promise",ru:"обещать",g:"text"},
+{en:"monument",ru:"памятник",g:"text"},
+{en:"in honour of",ru:"в честь (кого-то)",g:"text"},
+{en:"incredible",ru:"невероятный",g:"text"},
+{en:"achievement",ru:"достижение",g:"text"}];
+const GROUPS=[["all","Все"],["verbs","Глаголы о деньгах"],["adj","Прилагательные"],["things","Предметы"],["text","Слова из текстов"]];
+
+/* ---------- HELPERS ---------- */
+const h=(tag,a={},...kids)=>{const e=document.createElement(tag);for(const[k,v]of Object.entries(a)){if(k==="class")e.className=v;else if(k.startsWith("on"))e.addEventListener(k.slice(2),v);else if(k==="html")e.innerHTML=v;else e.setAttribute(k,v)}for(const k of kids.flat()){if(k==null||k===false)continue;e.append(k.nodeType?k:document.createTextNode(k))}return e};
+const shuffle=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
+const norm=s=>s.toLowerCase().replace(/[’‘`]/g,"'").replace(/[.!?,;:]/g,"").replace(/\s+/g," ").trim();
+const isRight=(v,a)=>a.split("|").some(x=>norm(x)===norm(v));
+let voice=null;function pickVoice(){const v=speechSynthesis.getVoices();voice=v.find(x=>/en[-_]GB/i.test(x.lang))||v.find(x=>/^en/i.test(x.lang))||null}
+if("speechSynthesis"in window){pickVoice();speechSynthesis.onvoiceschanged=pickVoice}
+function say(t){if(!("speechSynthesis"in window))return;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang="en-GB";if(voice)u.voice=voice;u.rate=.88;speechSynthesis.speak(u)}
+function shake(e){e.classList.remove("shake");void e.offsetWidth;e.classList.add("shake")}
+const sayBtn=t=>h("button",{class:"say","aria-label":"Послушать",onclick:e=>{e.stopPropagation();say(t)}},"🔊");
+let ERR=0;const DONE=new Set();let TOTAL=0;
+function err(){ERR++;document.getElementById("pErr").textContent="Ошибок: "+ERR}
+function upd(){document.getElementById("pDone").textContent=`Выполнено: ${DONE.size} из ${TOTAL}`;document.getElementById("barI").style.width=(DONE.size/TOTAL*100)+"%";const f=document.getElementById("finScore");if(f)f.textContent=`${DONE.size} / ${TOTAL}`}
+const T=document.getElementById("tasks");let NUM=0;
+function task(title,lead,build){const id="t"+(++NUM);const n=NUM;
+ const s=h("section",{class:"task",id},h("div",{class:"head"},h("span",{class:"n"},h("span",{},String(n))),h("h2",{},title)),h("p",{class:"lead"},lead));
+ const body=h("div");s.append(body);T.append(s);TOTAL++;
+ build(body,()=>{if(DONE.has(id))return;DONE.add(id);s.classList.add("done");upd()});}
+const fb=()=>h("div",{class:"fb"});
+function good(el,msg){el.className="fb ok";el.textContent=msg||"Отлично! ✓"}
+function bad(el,msg){el.className="fb no";el.textContent=msg}
+const pick=(arr,n)=>shuffle(arr).slice(0,n);
+
+/* generic: one-at-a-time quiz; wrong items come back at the end */
+function quiz(body,items,done,{one=false,sentence=false}={}){
+ let q=[...items],missed=new Set(),total=items.length,solved=0;
+ const cnt=h("div",{class:"qcount"}),qq=h("div",{class:"qq"+(sentence?" sent":"")}),opts=h("div",{class:"opts"+(one?" one":"")}),f=fb();
+ body.append(cnt,qq,opts,f);
+ function show(){if(!q.length){cnt.textContent="";qq.textContent="";opts.innerHTML="";good(f,"Готово! Все ответы правильные ✓");done();return}
+  const it=q[0];cnt.textContent=`Вопрос ${solved+1} из ${total}`;qq.innerHTML="";qq.append(h("span",{html:it.q}));if(it.say){qq.append(sayBtn(it.say))}
+  f.textContent="";opts.innerHTML="";let wrongHere=false;
+  shuffle(it.o).forEach(o=>{const b=h("button",{class:"opt",onclick:()=>{
+   if(o===it.a){b.classList.add("right");if(it.sayAfter)say(it.sayAfter);[...opts.children].forEach(x=>x.disabled=true);
+     setTimeout(()=>{q.shift();if(wrongHere&&!missed.has(it)){missed.add(it);q.push(it);total++}solved++;show()},650)}
+   else{b.classList.add("wrong");b.disabled=true;shake(b);wrongHere=true;err()}}},o);opts.append(b)})}
+ show()}
+
+/* generic: tap-to-match in rounds */
+function match(body,rounds,done,sayLeft=true){
+ let r=0;const info=h("div",{class:"qcount"}),grid=h("div",{class:"match"}),f=fb();body.append(info,grid,f);
+ function round(){const pairs=rounds[r];info.textContent=rounds.length>1?`Раунд ${r+1} из ${rounds.length}`:"";
+  grid.innerHTML="";const L=h("div",{class:"col"}),R=h("div",{class:"col"});grid.append(L,R);let sel=null,left=pairs.length;
+  shuffle(pairs).forEach(p=>{const b=h("button",{class:"mi",onclick:()=>{if(b.classList.contains("got"))return;L.querySelectorAll(".sel").forEach(x=>x.classList.remove("sel"));b.classList.add("sel");sel={b,p};if(sayLeft)say(p[0])}},p[0]);L.append(b)});
+  shuffle(pairs).forEach(p=>{const b=h("button",{class:"mi",onclick:()=>{if(b.classList.contains("got"))return;if(!sel){shake(b);return}
+   if(sel.p===p){sel.b.classList.remove("sel");sel.b.classList.add("got");b.classList.add("got");sel=null;left--;
+     if(!left){r++;if(r<rounds.length){good(f,"Раунд пройден!");setTimeout(()=>{f.textContent="";round()},700)}else{good(f,"Все пары найдены ✓");done()}}}
+   else{b.classList.add("wrong");shake(b);err();setTimeout(()=>b.classList.remove("wrong"),500)}}},p[1]);R.append(b)});}
+ round()}
+
+/* generic: check typed inputs */
+function checker(body,inputs,done,{bank}={}){
+ let lvl=0;const f=fb();
+ const row=h("div",{class:"row"},h("button",{class:"btn",onclick:check},"Проверить"),h("button",{class:"btn ghost",onclick:hint},"Подсказка"));
+ body.append(row,f);
+ inputs.forEach(i=>{i.addEventListener("keydown",e=>{if(e.key==="Enter")check()});i.addEventListener("input",()=>{i.classList.remove("right","wrong");if(bank)markBank()})});
+ function markBank(){if(!bank)return;const vals=inputs.map(i=>norm(i.value));[...bank.children].forEach(s=>{const k=norm(s.textContent);s.classList.toggle("used",vals.includes(k))})}
+ function check(){let ok=0;inputs.forEach(i=>{const r=isRight(i.value,i.dataset.a);i.classList.toggle("right",r);i.classList.toggle("wrong",!r&&i.value.trim()!=="");if(r){ok++;i.readOnly=true}});
+  if(ok===inputs.length){good(f,"Всё верно! ✓");done()}else{bad(f,`Правильно: ${ok} из ${inputs.length}. Исправь красные и пустые поля.`);if(inputs.some(i=>i.classList.contains("wrong")))err()}}
+ function hint(){lvl++;inputs.forEach(i=>{if(!isRight(i.value,i.dataset.a)){const a=i.dataset.a.split("|")[0];i.placeholder=a.slice(0,Math.min(lvl,a.length))+"…"}});bad(f,"Подсказка — первые буквы в пустых полях (сотри свой ответ, чтобы увидеть).")}
+}
+const inp=(a,w)=>{const i=h("input",{type:"text","data-a":a,autocomplete:"off",autocapitalize:"off",spellcheck:"false"});if(w)i.style.width=w;return i};
+
+/* ---------- 1. FLASHCARDS ---------- */
+task("New Words · Карточки","Нажми на карточку, чтобы перевернуть. 🔊 — послушать. Пролистай все 48 слов — и задание засчитается.",(body,done)=>{
+ let list=W,i=0,ruFirst=false;const seen=new Set();
+ const chips=h("div",{class:"chips"});const card=h("div",{class:"card"},h("div",{class:"inner"},h("div",{class:"face front"}),h("div",{class:"face back"})));
+ const count=h("span",{class:"count"}),seenT=h("div",{class:"qcount",style:"text-align:center;margin-top:8px"});
+ GROUPS.forEach(([k,l])=>chips.append(h("button",{class:"chip"+(k==="all"?" on":""),onclick:e=>{chips.querySelectorAll(".chip").forEach(c=>c.classList.remove("on"));e.target.classList.add("on");list=k==="all"?W:W.filter(w=>w.g===k);i=0;render()}},l)));
+ const enFace=w=>[h("b",{},w.en),w.past?h("small",{},"past: "+w.past):null,h("em",{},"нажми — перевод")];
+ const ruFace=w=>[h("b",{style:"font-size:clamp(20px,6vw,30px)"},w.ru),h("em",{},"нажми — английское слово")];
+ function render(){const w=list[i];card.classList.remove("flip");const[fr,bk]=card.querySelectorAll(".face");
+  setTimeout(()=>{fr.innerHTML="";bk.innerHTML="";fr.append(...(ruFirst?ruFace(w):enFace(w)));bk.append(...(ruFirst?enFace(w):ruFace(w)))},card.classList.contains("flip")?0:0);
+  count.textContent=`${i+1} / ${list.length}`;seen.add(w.en);seenT.textContent=`Просмотрено: ${seen.size} из ${W.length}`;if(seen.size===W.length)done();if(!ruFirst)say(w.en)}
+ card.addEventListener("click",()=>{card.classList.toggle("flip");const w=list[i];if(ruFirst&&card.classList.contains("flip"))say(w.en)});
+ const ctrl=h("div",{class:"ctrl"},
+  h("button",{class:"round","aria-label":"Назад",onclick:()=>{i=(i-1+list.length)%list.length;render()}},"‹"),
+  h("button",{class:"round","aria-label":"Послушать",onclick:()=>say(list[i].en)},"🔊"),count,
+  h("button",{class:"round","aria-label":"Перемешать",onclick:()=>{list=shuffle(list);i=0;render()}},"⤮"),
+  h("button",{class:"round","aria-label":"Вперёд",onclick:()=>{i=(i+1)%list.length;render()}},"›"));
+ const tog=h("label",{style:"display:flex;gap:8px;justify-content:center;align-items:center;font-weight:800;margin-top:12px"},h("input",{type:"checkbox",onchange:e=>{ruFirst=e.target.checked;render()}}),"Сначала русский");
+ const wl=h("div",{class:"wl"});GROUPS.slice(1).forEach(([k,l])=>{wl.append(h("div",{class:"gh"},l));W.filter(w=>w.g===k).forEach(w=>{wl.append(h("div",{class:"e"},w.en+(w.past?" · "+w.past:"")),h("div",{},w.ru))})});
+ body.append(chips,card,ctrl,tog,seenT,h("details",{},h("summary",{},"Список всех слов"),wl));render();
+});
+
+/* ---------- 2. EN -> RU ---------- */
+task("What does it mean?","Выбери перевод слова. Ошибки вернутся в конце — пока не ответишь правильно.",(body,done)=>{
+ const items=pick(W,16).map(w=>{const same=W.filter(x=>x!==w&&x.g===w.g),other=W.filter(x=>x!==w);const d=pick(same.length>=3?same:other,3).map(x=>x.ru);return{q:w.en,say:w.en,a:w.ru,o:[w.ru,...d]}});
+ quiz(body,items,done)});
+
+/* ---------- 3. RU -> EN ---------- */
+task("Choose the English word","Выбери английское слово.",(body,done)=>{
+ const items=pick(W,16).map(w=>{const same=W.filter(x=>x!==w&&x.g===w.g);const d=pick(same.length>=3?same:W.filter(x=>x!==w),3).map(x=>x.en);return{q:w.ru,a:w.en,sayAfter:w.en,o:[w.en,...d]}});
+ quiz(body,items,done)});
+
+/* ---------- 4. MATCH ---------- */
+task("Find the pairs","Нажми английское слово слева, потом его перевод справа.",(body,done)=>{
+ const p=pick(W,20).map(w=>[w.en,w.ru]);match(body,[p.slice(0,5),p.slice(5,10),p.slice(10,15),p.slice(15,20)],done)});
+
+/* ---------- 5. OPPOSITES ---------- */
+task("Opposites","Найди противоположности: слово слева — его «антоним» справа.",(body,done)=>{
+ match(body,[[["buy","sell"],["lend","borrow"],["spend","save"],["win","lose"],["expensive","cheap"],["rich","poor"]]],done)});
+
+/* ---------- 6. CHOOSE THE RIGHT WORD ---------- */
+task("Choose the right word","Какое слово подходит в предложение? Будь внимателен: lend/borrow, earn/win, spend/waste — частые ошибки!",(body,done)=>{
+ const S=[["Can you ___ me your pen, please?","lend","borrow"],["Can I ___ your bike for the weekend?","borrow","lend"],["My dad ___ a lot of money. He's a pilot.","earns","wins"],["She ___ a new phone in a competition.","won","earned"],
+ ["Don't ___ your money on sweets!","waste","save"],["I'm ___ money for a new laptop.","saving","spending"],["He ___ his old skateboard for a guitar.","swapped","borrowed"],["They ___ their car in the local newspaper.","advertised","offered"],
+ ["Oh no! I ___ my keys again!","lost","wasted"],["How much did you ___ on that jacket?","spend","earn"],["I want to ___ my old bike. Do you want to buy it?","sell","buy"],["This T-shirt was only £2. It was really ___.","cheap","expensive"],
+ ["The museum is ___ on Sundays. You don't pay anything.","free","cheap"],["He has three houses and a yacht. He's very ___.","rich","poor"],["Diamonds are very ___.","expensive","cheap"],["Teenagers in Britain ___ about £3 an hour.","earn","win"]];
+ quiz(body,S.map(([s,a,b])=>({q:s.replace("___",'<span class="gap"></span>'),a,o:[a,b],sayAfter:s.replace("___",a)})),done,{sentence:true})});
+
+/* ---------- 7. TYPE THE VERB ---------- */
+task("Write the verb","Впиши глагол по-английски. Русская подсказка — в скобках.",(body,done)=>{
+ const S=[["Teenagers often","earn","(зарабатывать)","money by babysitting."],["I never","borrow","(брать взаймы)","money from my friends."],["Can you","lend","(одолжить)","me £5 until Friday?"],["Let's","swap","(обменяться)","stickers!"],
+ ["We","spend","(тратить)","too much money on pizza."],["Put your coins in a piggy bank and","save","(копить)","them."],["Shops","advertise","(рекламировать)","their products on TV."],["Be careful! Don't","lose","(потерять)","your phone."],
+ ["Do you want to","win","(выиграть)","the match?"],["I want to","sell","(продать)","my old computer."],["Where can I","buy","(купить)","a cheap barbecue?"],["Don't","waste","(тратить впустую)","your time!"]];
+ const list=h("div",{class:"list"}),ins=[];S.forEach(([a,ans,ru,b],k)=>{const i=inp(ans,"130px");ins.push(i);list.append(h("div",{class:"item"},h("span",{class:"num"},(k+1)+"."),a,i,h("span",{class:"ru"},ru),b))});
+ body.append(list);checker(body,ins,done)});
+
+/* ---------- 8. PAST FORMS ---------- */
+task("Past forms","Напиши прошедшую форму глагола. ⚡ — неправильный глагол (irregular).",(body,done)=>{
+ const irr=["buy","sell","spend","lose","lend","win"];const g=h("div",{class:"past"}),ins=[];
+ shuffle(W.filter(w=>w.g==="verbs")).forEach(w=>{const i=inp(w.past);ins.push(i);g.append(h("div",{class:"cell"},h("span",{},w.en+(irr.includes(w.en)?" ⚡":"")),i))});
+ body.append(g);checker(body,ins,done)});
+
+/* ---------- 9. STORY IN THE PAST ---------- */
+task("My new phone","Поставь глаголы в скобках в прошедшее время (Past Simple).",(body,done)=>{
+ const parts=["Last summer I ",["saved","save"]," all my pocket money. I wanted a new phone, but it was really expensive. So I decided to sell my old skateboard. I ",["advertised","advertise"]," it in the local newspaper, and a girl phoned me. She ",["bought","buy"]," it for £40. Then I ",["borrowed","borrow"]," £20 from my brother, and he ",["lent","lend"]," me £10 more. Finally I ",["spent","spend"]," all the money on the phone. But a week later I ",["lost","lose"]," it on the bus! I ",["wasted","waste"]," all my money! Then my friend ",["swapped","swap"]," his old phone for my headphones. In the end I ",["won","win"]," a new phone in a school competition!"];
+ const st=h("div",{class:"story"}),ins=[];parts.forEach(p=>{if(typeof p==="string")st.append(p);else{const i=inp(p[0]);ins.push(i);st.append(h("span",{class:"bv"},"("+p[1]+") "),i)}});
+ body.append(st);checker(body,ins,done)});
+
+/* ---------- 10. SCRAMBLE ---------- */
+task("Build the word","Собери слово из букв. Нажимай буквы по порядку; нажми букву в ответе, чтобы убрать её.",(body,done)=>{
+ const words=["borrow","advertise","expensive","doorknob","snowmobile","achievement","monument","incredible","barbecue","newspaper","mayor","island"].map(e=>W.find(w=>w.en===e));
+ let k=0;const cnt=h("div",{class:"qcount"}),ru=h("div",{class:"qq"}),tgt=h("div",{class:"target"}),tiles=h("div",{class:"tiles"}),f=fb();
+ body.append(cnt,ru,tgt,tiles,f);
+ function next(){if(k>=words.length){cnt.textContent="";ru.textContent="";tgt.remove();tiles.innerHTML="";good(f,"Все слова собраны ✓");done();return}
+  const w=words[k];cnt.textContent=`Слово ${k+1} из ${words.length}`;ru.textContent=w.ru;tgt.innerHTML="";tgt.className="target";tiles.innerHTML="";f.textContent="";
+  let letters=w.en.split("");let sh;do{sh=shuffle(letters)}while(sh.join("")===w.en);
+  sh.forEach(ch=>{const t=h("button",{class:"tile",onclick:()=>{if(t.classList.contains("used"))return;t.classList.add("used");const a=h("button",{class:"tile",onclick:()=>{a.remove();t.classList.remove("used");f.textContent=""}},ch);tgt.append(a);test()}},ch);tiles.append(t)});
+  function test(){const s=[...tgt.children].map(x=>x.textContent).join("");if(s.length<w.en.length)return;
+   if(s===w.en){tgt.classList.add("ok");say(w.en);good(f,"Верно!");setTimeout(()=>{k++;next()},900)}else{bad(f,"Не совсем. Убери лишние буквы и попробуй ещё.");shake(tgt);err()}}}
+ next()});
+
+/* ---------- 11. LISTEN AND WRITE ---------- */
+task("Listen and write","Нажми 🔊, послушай слово и напиши его.",(body,done)=>{
+ const ws=["earn","lend","swap","cheap","offer","promise","local","exactly","finally","including"];const list=h("div",{class:"list listen"}),ins=[];
+ ws.forEach((w,k)=>{const i=inp(w);ins.push(i);list.append(h("div",{class:"item"},h("span",{class:"num"},(k+1)+"."),sayBtn(w),i))});body.append(list);checker(body,ins,done)});
+
+/* ---------- 12. THE STORY OF KYLE ---------- */
+task("The story of Kyle MacDonald","Прочитай историю и вставь слова из рамки. Каждое слово — один раз.",(body,done)=>{
+ const parts=["Kyle MacDonald, a young man from Canada, had an ",["incredible"]," idea. He wanted to start with one small red ",["paperclip"]," and ",["swap"]," it for something bigger and better. First he got a pen ",["in the shape of"]," a fish. ",["Then"]," he swapped the pen for a funny ",["doorknob"],". He made fourteen swaps, ",["including"]," a barbecue, a snowmobile and a ",["van"],". He even got an afternoon with a rock star! ",["Finally"],", the ",["mayor"]," of the small town of Kipling ",["offered"]," him a house. ",["In addition"],", the town ",["promised"]," to build a huge paperclip ",["monument"]," ",["in honour of"]," Kyle's ",["achievement"],". So, ",["in the end"],", one little paperclip became a three-bedroom house!"];
+ const ans=parts.filter(p=>typeof p!=="string").map(p=>p[0]);const bank=h("div",{class:"bank"});shuffle(ans).forEach(a=>bank.append(h("span",{},a.toLowerCase())));
+ const st=h("div",{class:"story"}),ins=[];parts.forEach(p=>{if(typeof p==="string")st.append(p);else{const i=inp(p[0],Math.max(90,p[0].length*11+20)+"px");ins.push(i);st.append(i)}});
+ body.append(bank,st);checker(body,ins,done,{bank});
+ body.append(h("div",{class:"row"},h("button",{class:"btn ghost",onclick:()=>say(parts.map(p=>typeof p==="string"?p:p[0]).join(""))},"🔊 Послушать всю историю")))});
+
+/* ---------- 13. ORDER OF SWAPS ---------- */
+task("Kyle's swaps","Расставь обмены Кайла по порядку: нажимай от скрепки до дома.",(body,done)=>{
+ const order=["a red paperclip","a pen in the shape of a fish","a doorknob","a barbecue","a snowmobile","a van","an afternoon with Alice Cooper","a role in a Hollywood film","a three-bedroom house"];
+ let pos=0;const chain=h("div",{class:"chain"}),tiles=h("div",{class:"tiles"}),f=fb();body.append(chain,tiles,f);
+ shuffle(order).forEach(o=>{const t=h("button",{class:"tile w",onclick:()=>{if(o===order[pos]){if(pos)chain.append(h("span",{class:"arr"},"→"));chain.append(h("span",{class:"link"},o));t.classList.add("used");pos++;say(o);if(pos===order.length){good(f,"Вот так из скрепки получился дом! ✓");done()}}else{shake(t);err();bad(f,"Нет, это было позже или раньше. Подумай ещё.")}}},o);tiles.append(t)})});
+
+/* ---------- 14. TRUE / FALSE ---------- */
+task("True or False?","Верно (True) или неверно (False) — по тексту «One Red Paperclip».",(body,done)=>{
+ const S=[["Kyle started with a small red paperclip.",1],["Kyle is from Britain.",0],["Kyle started his experiment on the Internet.",1],["His first swap was a pen in the shape of a fish.",1],["He made only four swaps.",0],["The mayor of Kipling offered him a car.",0],["The town promised to build a big paperclip monument.",1],["Kyle never wrote about his adventures.",0],["Kyle thinks that nothing is impossible.",1],["The experiment started in July 2005.",1]];
+ const list=h("div",{class:"list tf"});let left=S.length;const f=fb();
+ S.forEach(([s,t])=>{const it=h("div",{class:"item"});let solved=false;const mk=(lab,val)=>{const b=h("button",{onclick:()=>{if(solved)return;if(val===t){b.classList.add("right");it.classList.add("ok");solved=true;left--;if(!left){good(f,"Все ответы верные ✓");done()}}else{b.classList.add("wrong");shake(b);err()}}},lab);return b};
+  it.append(h("span",{class:"q"},s),h("span",{class:"bs"},mk("True",1),mk("False",0)));list.append(it)});
+ body.append(list,f)});
+
+/* ---------- 15. PHRASES ---------- */
+task("Make phrases","Собери словосочетания: начало слева — конец справа.",(body,done)=>{
+ match(body,[[["in the","end"],["in the shape","of a fish"],["in honour","of Kyle"],["in","addition"],["pocket","money"]],[["local","newspaper"],["incredible","achievement"],["three-bedroom","house"],["rock","star"],["Hollywood","film"]]],done,false)});
+
+/* ---------- 16. SENTENCE BUILDER ---------- */
+task("Build the sentence","Переведи: нажимай слова по порядку и собери предложение.",(body,done)=>{
+ const S=[["Можно я возьму взаймы твою ручку?","Can I borrow your pen?"],["Он обменял скрепку на ручку.","He swapped the paperclip for a pen."],["Я накопил все свои карманные деньги.","I saved all my pocket money."],["Мэр предложил ему дом.","The mayor offered him a house."],
+ ["В конце концов он получил дом.","In the end he got a house."],["Не трать деньги впустую на вещи, которые тебе не нужны.","Don't waste money on things you don't need."],["Они построили памятник в честь Кайла.","They built a monument in honour of Kyle."],["Я дал объявление о велосипеде в местной газете.","I advertised the bike in the local newspaper."]];
+ let k=0;const cnt=h("div",{class:"qcount"}),ru=h("div",{class:"qq sent"}),tgt=h("div",{class:"target"}),tiles=h("div",{class:"tiles"}),f=fb();body.append(cnt,ru,tgt,tiles,f);
+ function next(){if(k>=S.length){cnt.textContent="";ru.textContent="";tgt.remove();tiles.innerHTML="";good(f,"Все предложения собраны ✓");done();return}
+  const[r,e]=S[k];const words=e.split(" ");cnt.textContent=`Предложение ${k+1} из ${S.length}`;ru.textContent=r;tgt.innerHTML="";tgt.className="target";tiles.innerHTML="";f.textContent="";
+  let sh;do{sh=shuffle(words)}while(sh.join(" ")===e);
+  sh.forEach(wd=>{const t=h("button",{class:"tile w",onclick:()=>{if(t.classList.contains("used"))return;t.classList.add("used");const a=h("button",{class:"tile w",onclick:()=>{a.remove();t.classList.remove("used");f.textContent=""}},wd);tgt.append(a);test()}},wd);tiles.append(t)});
+  function test(){const got=[...tgt.children].map(x=>x.textContent);if(got.length<words.length)return;
+   if(got.join(" ")===e){tgt.classList.add("ok");say(e);good(f,"Верно!");setTimeout(()=>{k++;next()},1300)}else{bad(f,"Порядок не тот. Нажми на слова в ответе, чтобы убрать их.");shake(tgt);err()}}}
+ next()});
+
+/* ---------- FINAL ---------- */
+const fin=h("section",{class:"task final"},h("div",{class:"big",id:"finScore"},"0 / 0"),h("p",{class:"lead",style:"margin:4px 0 12px"},"заданий выполнено. Напиши своё имя и отправь результат учителю."));
+const nm=h("input",{type:"text",placeholder:"Твоё имя"});const cf=fb();
+fin.append(nm,h("div",{class:"row",style:"justify-content:center"},h("button",{class:"btn",onclick:()=>{const t=`${nm.value.trim()||"Ученик"} — One Red Paperclip: выполнено ${DONE.size} из ${TOTAL} заданий, ошибок: ${ERR}.`;
+ (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>good(cf,"Скопировано! Вставь в сообщение учителю.")).catch(()=>{bad(cf,t)})}},"Скопировать результат")),cf);
+T.append(fin);upd();
+</script></body></html>
